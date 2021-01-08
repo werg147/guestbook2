@@ -85,11 +85,28 @@ public class GuestController extends HttpServlet {
 			
 			//dao -> 삭제
 			GuestDao guestDao = new GuestDao();
-			guestDao.guestDelete(guestVo);
+			int count = guestDao.guestDelete(guestVo);
 			
 			//리다이렉트
-			response.sendRedirect("/guestbook2/gbc?action=list");
-			 
+			//response.sendRedirect("/guestbook2/gbc?action=list");
+			
+			//리턴값이 1이면 삭제, 0이면 삭제안함 추가
+			if(count == 1){
+				response.sendRedirect("/guestbook2/gbc?action=list"); 
+				//삭제됐습니다. <br>
+				//<a href="./addList.jsp">처음으로 이동</a>
+			} else if(count == 0) {
+				System.out.println("삭제실패");
+				//데이터 전달
+				request.setAttribute("NO", no);
+				
+				//jsp에 포워드
+				RequestDispatcher rd = request.getRequestDispatcher("./WEB-INF/deleteForm.jsp"); //jsp파일 위치
+				rd.forward(request, response);
+				
+			}
+			
+			
 		}
 		
 	} 
