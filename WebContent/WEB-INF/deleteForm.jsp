@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
-	//no가 no일때
+	//list.jsp 에서 삭제버튼을 누르면 > no값 파라미터로 읽기
 	int no = Integer.parseInt(request.getParameter("no"));
+	//주소String으로 읽히는 no값을 int에 담기
 
 %>
 

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.javaex.dao.GuestDao;
+import com.javaex.util.WebUtil;
 import com.javaex.vo.GuestVo;
 
 @WebServlet("/gbc")
@@ -35,8 +36,10 @@ public class GuestController extends HttpServlet {
 			request.setAttribute("gList", guestList);
 			
 			//jsp에 포워드
-			RequestDispatcher rd = request.getRequestDispatcher("./WEB-INF/list.jsp"); //jsp파일 위치
-			rd.forward(request, response);
+			//RequestDispatcher rd = request.getRequestDispatcher("./WEB-INF/list.jsp"); //jsp파일 위치
+			//rd.forward(request, response);
+			
+			WebUtil.forward(request, response, "./WEB-INF/list.jsp");
 		
 		} else if("insert".equals(action)) {
 			System.out.println("등록하기");
@@ -54,29 +57,23 @@ public class GuestController extends HttpServlet {
 			guestDao.guestInsert(guestVo);
 			
 			//리다이렉트
-			response.sendRedirect("/guestbook2/gbc?action=list");
+			//response.sendRedirect("/guestbook2/gbc?action=list");
+			
+			WebUtil.redirect(request, response, "/guestbook2/gbc?action=list");
 			
 		} else if("delform".equals(action)) {
 			System.out.println("삭제폼");
 			
-			//no를 주면 해당하는 no를 가져온다
-			int no = Integer.parseInt(request.getParameter("no"));
-			
-			//no 담기
-			GuestDao guestDao = new GuestDao();
-			GuestVo guestVo = guestDao.getGuest(no);
-			
-			//데이터 전달
-			request.setAttribute("NO", no);
-			
 			//jsp에 포워드
-			RequestDispatcher rd = request.getRequestDispatcher("./WEB-INF/deleteForm.jsp"); //jsp파일 위치
-			rd.forward(request, response);
+			//RequestDispatcher rd = request.getRequestDispatcher("./WEB-INF/deleteForm.jsp"); //jsp파일 위치
+			//rd.forward(request, response);
+			
+			WebUtil.forward(request, response, "./WEB-INF/deleteForm.jsp");
 			
 		} else if("delete".equals(action)) {
 			System.out.println("삭제");
 			
-			//no, password 일치하면 삭제
+			//no, password 일치하면 삭제/ no,password 파라미터값 읽기
 			int no = Integer.parseInt(request.getParameter("no"));
 			String password = request.getParameter("password");
 			
@@ -89,10 +86,11 @@ public class GuestController extends HttpServlet {
 			
 			//리다이렉트
 			//response.sendRedirect("/guestbook2/gbc?action=list");
-			
+				
 			//리턴값이 1이면 삭제, 0이면 삭제안함 추가
 			if(count == 1){
-				response.sendRedirect("/guestbook2/gbc?action=list"); 
+				//response.sendRedirect("/guestbook2/gbc?action=list"); 
+				WebUtil.redirect(request, response, "/guestbook2/gbc?action=list");
 				//삭제됐습니다. <br>
 				//<a href="./addList.jsp">처음으로 이동</a>
 			} else if(count == 0) {
@@ -101,8 +99,23 @@ public class GuestController extends HttpServlet {
 				request.setAttribute("NO", no);
 				
 				//jsp에 포워드
-				RequestDispatcher rd = request.getRequestDispatcher("./WEB-INF/deleteForm.jsp"); //jsp파일 위치
-				rd.forward(request, response);
+				//RequestDispatcher rd = request.getRequestDispatcher("./WEB-INF/deleteForm.jsp"); //jsp파일 위치
+				//rd.forward(request, response);
+				WebUtil.redirect(request, response, "./WEB-INF/deleteForm.jsp");
+				
+			} else {
+				//기본값을 리스트로 설정이 안됨 ??
+				System.out.println("기본값  리스트 처리");
+				
+				//리스트 가져오기
+				GuestDao guestDao1 = new GuestDao(); //guestDao 이름이 겹친다고 오류남.. ????
+				List<GuestVo> guestList = guestDao1.getGuestList();
+				
+				//데이터 담기
+				request.setAttribute("gList", guestList);
+				
+				//포워드
+				WebUtil.forward(request, response, "./WEB-INF/list.jsp");
 				
 			}
 			
