@@ -99,13 +99,13 @@ public class GuestController extends HttpServlet {
 			} else if (count == 0) {
 				System.out.println("삭제실패");
 				// 데이터 전달
-				request.setAttribute("NO", no);
+				request.setAttribute("no", no);
 
 				// jsp에 포워드
 				// RequestDispatcher rd =
 				// request.getRequestDispatcher("./WEB-INF/deleteForm.jsp"); //jsp파일 위치
 				// rd.forward(request, response);
-				WebUtil.redirect(request, response, "./WEB-INF/deleteForm.jsp");
+				WebUtil.forward(request, response, "./WEB-INF/deleteForm.jsp");
 
 			}
 

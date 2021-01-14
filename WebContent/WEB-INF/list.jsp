@@ -1,14 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<%@ page import = "java.util.List" %>
-<%@ page import = "com.javaex.vo.GuestVo" %>
-
-<!-- GuestController forward > guestList -->
-<%  //형변환 object -> List<GuestVo>
-	List<GuestVo> guestList = (List<GuestVo>)request.getAttribute("gList");
-	//System.out.println(guestList);
-%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -36,20 +27,21 @@
 		<input type="hidden" name="action" value="insert">
 	</form>
 	
-	<%for(int i=0; i<guestList.size(); i++){ %>
+	<!-- request.getAttribute("gList"); -->
+	<c:forEach items="${gList}" var="gList">
 		<table border = "1" width="500">
 			<tr>
-				<td><%=guestList.get(i).getNo() %></td>
-				<td><%=guestList.get(i).getName() %></td>
-				<td><%=guestList.get(i).getRegDate() %></td>
-				<td><a href="/guestbook2/gbc?action=delform&no=<%=guestList.get(i).getNo() %>">삭제</a></td>
+				<td>${gList.no}</td>
+				<td>${gList.name}</td>
+				<td>${gList.regDate}</td>
+				<td><a href="/guestbook2/gbc?action=delform&no=${gList.no}">삭제</a></td>
 			</tr>
 			<tr>
-				<td colspan=4><%=guestList.get(i).getContent() %></td>
+				<td colspan=4>${gList.content}</td>
 			</tr>
 		</table>
 		<br>
-	<%} %>
+	</c:forEach>
 
 </body>
 </html>
